@@ -4,7 +4,6 @@ import shutil
 import os
 import uuid
 import sys
-sys.path.append(os.path.abspath("GAN-V2/GAN-V2/deploy"))
 from test_by_onnx import Convert
 
 app = FastAPI()
