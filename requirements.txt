@@ -8,3 +8,4 @@ pillow
 tf2onnx
 coremltools
 uvicorn
+fastapi
