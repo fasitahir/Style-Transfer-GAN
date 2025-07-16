@@ -25,7 +25,7 @@ curl -X POST http://192.168.10.223:8000/stylize/ \
 |----------|-------------|
 | `-X POST` | Sends a POST request to the specified URL. |
 | `-F "file=@D:/img.jpg"` | Uploads the image located at `D:/img.jpg`. The `@` tells `curl` to send the file contents. |
-| `-F "device=cpu"` | Tells the API to use the CPU for processing. Other options (like `cuda`) may be supported depending on the server. |
+| `-F "device=cpu"` | Tells the API to use the CPU for processing. Other options (like `gpu`) are supported depending on the server. |
 | `--output "D:/output.jpeg"` | Saves the response (processed image) to the specified location. |
 
 ---
