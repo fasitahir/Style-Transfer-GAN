@@ -69,8 +69,4 @@ Make sure this path is valid and writable.
 
 ---
 
-## 📬 Contact
 
-For questions or support, feel free to reach out to the developer or open an issue on the associated repository.
-
----
