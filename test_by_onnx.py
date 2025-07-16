@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-# @Time    : 2021/8/31 19:20
-# @Author  : Xin Chen
-# @File    : test_by_onnx.py
-# @Software: PyCharm
-
 import onnxruntime as ort
 import time, os, cv2,argparse
 import numpy as np
@@ -49,37 +43,27 @@ def save_images(images, image_path, size):
     images = cv2.resize(images, size)
     cv2.imwrite(image_path, cv2.cvtColor(images, cv2.COLOR_RGB2BGR))
 
-def Convert(input_imgs_path, output_path, onnx ="model.onnx", device="cpu"):
-    # result_dir = opj(output_path, style_name)
-    result_dir = output_path
-    check_folder(result_dir)
-    test_files = glob('{}/*.*'.format(input_imgs_path))
-    test_files = [ x for x in test_files if os.path.splitext(x)[-1] in pic_form]
-    if ort.get_device() == 'GPU' and device == "gpu":
-        session = ort.InferenceSession(onnx, providers = ['CUDAExecutionProvider','CPUExecutionProvider',])
-    else:
-        session = ort.InferenceSession(onnx, providers=['CPUExecutionProvider', ])
-    x = session.get_inputs()[0].name
-    y = session.get_outputs()[0].name
+def Convert(input_img_path, output_path, onnx="model.onnx", device="cpu"):
+    """Process a single image file"""
+    if not os.path.exists(input_img_path):
+        raise FileNotFoundError(f"Input file does not exist: {input_img_path}")
 
-    begin = time.time()
-    for i, sample_file  in enumerate(test_files) :
-        t = time.time()
-        sample_image, shape = load_test_data(sample_file, onnx)
-        image_path = os.path.join(result_dir,'{0}'.format(os.path.basename(sample_file)))
-        fake_img = session.run(None, {x : sample_image})
-        save_images(fake_img[0], image_path, (shape[1], shape[0]))
-        print(f'Processing image: {i}, image size: {shape[1], shape[0]}, ' + sample_file, f' time: {time.time() - t:.3f} s')
-    end = time.time()
-    print(f'Average time per image : {(end-begin)/len(test_files)} s')
+    if os.path.splitext(input_img_path)[-1] not in pic_form:
+        raise ValueError("Unsupported image format")
 
-if __name__ == '__main__':
+    os.makedirs(output_path, exist_ok=True)
 
-    # onnx_file = 'AnimeGANv3_Hayao_36.onnx'
-    # input_imgs_path = 'pic'
-    # output_path = 'AnimeGANv3_Hayao_36'
-    # Convert(input_imgs_path, output_path, onnx_file)
+    providers = ['CUDAExecutionProvider', 'CPUExecutionProvider'] if ort.get_device() == 'GPU' and device == "gpu" else ['CPUExecutionProvider']
+    session = ort.InferenceSession(onnx, providers=providers)
 
-    arg = parse_args()
-    Convert(arg.input_imgs_dir, arg.output_path, arg.model_path, arg.device)
+    x_name = session.get_inputs()[0].name
+    y_name = session.get_outputs()[0].name
 
+    start = time.time()
+    sample_image, shape = load_test_data(input_img_path, onnx)
+    fake_img = session.run(None, {x_name: sample_image})
+    
+    output_img_path = os.path.join(output_path, os.path.basename(input_img_path))
+    save_images(fake_img[0], output_img_path, (shape[1], shape[0]))
+
+    print(f"Processed {input_img_path} in {time.time() - start:.3f}s")

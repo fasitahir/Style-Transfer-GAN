@@ -5,5 +5,8 @@ opencv-python
 onnxruntime-gpu
 numpy
 pillow
-tf2onnx
 coremltools
+uvicorn
+fastapi
+python-multipart
+gunicorn
