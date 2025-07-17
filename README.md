@@ -32,7 +32,7 @@ curl -X POST https://style-transfer-gan.onrender.com/stylize/ \
 
 ## ✅ Requirements
 
-- A local server running at `http://192.168.10.223:8000/stylize/`
+- A server running at `https://style-transfer-gan.onrender.com/stylize/`
 - The file `D:/img.jpg` must exist and be accessible
 - Write permissions on the output directory
 
