@@ -11,7 +11,7 @@ The `curl` command sends a `POST` request to a locally hosted API, uploads an im
 ## 📤 Curl Command
 
 ```bash
-curl -X POST http://192.168.10.223:8000/stylize/ \
+curl -X POST https://style-transfer-gan.onrender.com/stylize/ \
      -F "file=@D:/img.jpg" \
      -F "device=cpu" \
      --output "D:/output.jpeg"
